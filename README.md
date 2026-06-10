@@ -201,3 +201,7 @@ cargo test -- --ignored
 
 ## Final Validation Response
 Paste your final `GET /tasks/view-my-tasks` James Bond response here after local run.
+
+## Assessment Transparency Artifacts
+- AI usage disclosure: `AI_USAGE.md`
+- Session prompt summary: `PROMPT_HISTORY.md`

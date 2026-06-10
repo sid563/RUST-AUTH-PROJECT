@@ -1,19 +1,12 @@
+//! JWT issue/decode helpers built on `jsonwebtoken`.
+
 use anyhow::anyhow;
 use chrono::{Duration, Utc};
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
 use mongodb::bson::oid::ObjectId;
-use serde::{Deserialize, Serialize};
 
-use crate::models::UserRole;
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct JwtClaims {
-    pub sub: String,
-    pub email: String,
-    pub role: String,
-    pub exp: usize,
-    pub iat: usize,
-}
+use crate::models::{JwtClaims, UserRole};
+use crate::utils::constants::ACCESS_TOKEN_TTL_HOURS;
 
 pub fn issue_access_token(
     user_id: &ObjectId,
@@ -22,17 +15,12 @@ pub fn issue_access_token(
     jwt_secret: &str,
 ) -> anyhow::Result<String> {
     let now = Utc::now();
-    let exp = now + Duration::hours(24);
-
-    let role_str = match role {
-        UserRole::Admin => "admin",
-        UserRole::Staff => "staff",
-    };
+    let exp = now + Duration::hours(ACCESS_TOKEN_TTL_HOURS);
 
     let claims = JwtClaims {
         sub: user_id.to_hex(),
         email: email.to_string(),
-        role: role_str.to_string(),
+        role: role.as_str().to_string(),
         iat: now.timestamp() as usize,
         exp: exp.timestamp() as usize,
     };
@@ -60,7 +48,7 @@ pub fn decode_access_token(token: &str, jwt_secret: &str) -> anyhow::Result<JwtC
 mod tests {
     use mongodb::bson::oid::ObjectId;
 
-    use crate::models::UserRole;
+    use crate::models::user::UserRole;
 
     use super::{decode_access_token, issue_access_token};
 

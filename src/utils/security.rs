@@ -1,3 +1,5 @@
+//! Argon2 password (and 2FA-code) hashing helpers.
+
 use anyhow::anyhow;
 use argon2::{
     password_hash::{PasswordHash, PasswordHasher, PasswordVerifier, SaltString},
@@ -17,8 +19,8 @@ pub fn hash_password(plain: &str) -> anyhow::Result<String> {
 }
 
 pub fn verify_password(plain: &str, hash: &str) -> anyhow::Result<bool> {
-    let parsed_hash = PasswordHash::new(hash)
-        .map_err(|e| anyhow!("invalid stored password hash: {e}"))?;
+    let parsed_hash =
+        PasswordHash::new(hash).map_err(|e| anyhow!("invalid stored password hash: {e}"))?;
     let argon2 = Argon2::default();
 
     Ok(argon2
