@@ -1,0 +1,29 @@
+[package]
+name = "rust-auth-project"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+actix-web = "4.11.0"
+anyhow = "1.0.98"
+argon2 = "0.5.3"
+async-trait = "0.1.89"
+chrono = { version = "0.4.42", features = ["serde"] }
+dotenvy = "0.15.7"
+futures = "0.3.31"
+jsonwebtoken = "9.3.1"
+mongodb = "3.3.0"
+rand = "0.9.2"
+rand_core = { version = "0.6.4", features = ["getrandom"] }
+redis = { version = "0.32.7", features = ["tokio-comp", "connection-manager"] }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.145"
+thiserror = "2.0.17"
+tokio = { version = "1.47.1", features = ["macros", "rt-multi-thread"] }
+tracing = "0.1.41"
+tracing-subscriber = { version = "0.3.20", features = ["env-filter"] }
+uuid = { version = "1.18.1", features = ["v4", "serde"] }
+
+[dev-dependencies]
+actix-rt = "2.11.0"
+reqwest = { version = "0.12.24", default-features = false, features = ["json", "rustls-tls"] }
